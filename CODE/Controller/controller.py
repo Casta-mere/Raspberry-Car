@@ -25,6 +25,7 @@ class controller:
         self.back=0
         self.lr=0
         self.flag = True
+        self.direction = 0
 
     def run(self):
         threading.Thread(target=self.Motor).start()
@@ -69,30 +70,39 @@ class controller:
         while self.flag:
             time.sleep(0.1)
             if(self.lr>0.5):
+                self.direction = 1
                 GPIO.output(motor_a_in1_pin, GPIO.HIGH)
                 GPIO.output(motor_a_in2_pin, GPIO.LOW)
                 GPIO.output(motor_b_in1_pin, GPIO.LOW)
                 GPIO.output(motor_b_in2_pin, GPIO.HIGH)
             elif(self.lr<-0.5):
+                self.direction = 0
                 GPIO.output(motor_a_in1_pin, GPIO.LOW)
                 GPIO.output(motor_a_in2_pin, GPIO.HIGH)
                 GPIO.output(motor_b_in1_pin, GPIO.HIGH)
                 GPIO.output(motor_b_in2_pin, GPIO.LOW)
             elif(self.forward>0.5):
+                self.direction = 2
                 GPIO.output(motor_a_in1_pin, GPIO.HIGH)
                 GPIO.output(motor_a_in2_pin, GPIO.LOW)
                 GPIO.output(motor_b_in1_pin, GPIO.HIGH)
                 GPIO.output(motor_b_in2_pin, GPIO.LOW)
             elif(self.back>0.5):
+                self.direction = 3
                 GPIO.output(motor_a_in1_pin, GPIO.LOW)
                 GPIO.output(motor_a_in2_pin, GPIO.HIGH)
                 GPIO.output(motor_b_in1_pin, GPIO.LOW)
                 GPIO.output(motor_b_in2_pin, GPIO.HIGH)
             else:
+                self.direction = 4
                 GPIO.output(motor_a_in1_pin, GPIO.LOW)
                 GPIO.output(motor_a_in2_pin, GPIO.LOW)
                 GPIO.output(motor_b_in1_pin, GPIO.LOW)
                 GPIO.output(motor_b_in2_pin, GPIO.LOW)
+            # print(self.direction)
+
+    def getDirection(self):
+        return self.direction
     
     def stop(self):
         self.flag = False
