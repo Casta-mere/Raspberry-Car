@@ -17,7 +17,6 @@ GPIO.setup(motor_b_in2_pin, GPIO.OUT)  # 设置该端口为输出模式
 
 
 class controller:
-
     def __init__(self):
         pygame.init()
         pygame.joystick.init()
@@ -26,46 +25,30 @@ class controller:
         self.lr=0
         self.flag = True
         self.direction = 0
-
     def run(self):
         threading.Thread(target=self.Motor).start()
         threading.Thread(target=self.control).start()
-
     def control(self):
         num_joysticks = pygame.joystick.get_count()
         if num_joysticks > 0:
             joystick = pygame.joystick.Joystick(0)
             joystick.init()
-
             while self.flag:
-
                 for event in pygame.event.get():
-
                     if event.type == pygame.JOYAXISMOTION:
                         axis = event.axis
                         value = event.value
                         if(axis==5):
                             if(value!=self.forward):
                                 self.forward=value
-                                # print(f"Joystick left motion on joystick : {value}")
-
                         elif(axis==2):
                             if(value!=self.back):
                                 self.back=value
-                                # print(f"Joystick right motion on joystick : {value}")
-                            
                         elif(axis==0):
                             if(value!=self.lr):
                                 self.lr=value
-                                # print(f"Joystick right motion on joystick : {value}")
-                                
-                    # elif event.type == pygame.JOYBUTTONDOWN:
-                    #     self.flag = False
-                    #     exit(0)
-            
         pygame.joystick.quit()
         pygame.quit()
-
     def Motor(self):
         while self.flag:
             time.sleep(0.1)
@@ -99,16 +82,10 @@ class controller:
                 GPIO.output(motor_a_in2_pin, GPIO.LOW)
                 GPIO.output(motor_b_in1_pin, GPIO.LOW)
                 GPIO.output(motor_b_in2_pin, GPIO.LOW)
-            # print(self.direction)
 
     def getDirection(self):
-        return self.direction
-    
+        return self.direction    
     def stop(self):
         self.flag = False
         pygame.joystick.quit()
         pygame.quit()
-                
-# if __name__ == "__main__":
-#     c=controller()
-#     c.run()
